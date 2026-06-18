@@ -1,6 +1,5 @@
-from django.db import models
-
 from core.models import PublishedModel
+from django.db import models
 
 
 class Category(PublishedModel):
@@ -24,15 +23,25 @@ class IceCream(PublishedModel):
     wrapper = models.OneToOneField(
         Wrapper,
         on_delete=models.SET_NULL,
-        related_name='ice_cream',
+        related_name="ice_cream",
         null=True,
         blank=True,
     )
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
-        related_name='ice_creams',
+        related_name="ice_creams",
     )
     toppings = models.ManyToManyField(Topping)
     is_on_main = models.BooleanField(default=False)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    output_order = models.PositiveSmallIntegerField(
+        default=100,
+        verbose_name="Порядок отображения",
+    )
 
+    class Meta:
+        ordering = ("output_order", "title")
+
+    def __str__(self):
+        return self.title
